@@ -1,10 +1,12 @@
-package com.report;
+package com.report.service;
+
+import com.report.dto.ConstructionDTO;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public interface ReportGenerator {
+public interface ReportGeneratorServiceImpl {
     Map<Integer, Integer> getUniqueCountOfCustomerIdForContractId(List<ConstructionDTO> dto);
 
     Map<String, Integer> getUniqueCountOfCustomerIdForGeoZone(List<ConstructionDTO> dto);

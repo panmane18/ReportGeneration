@@ -1,5 +1,7 @@
-package com.report;
+package com.report.utility;
 
+import com.report.dto.ConstructionDTO;
+import com.report.exception.DataFormatException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
@@ -7,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class StringParser {
+public class StringDataParser {
     public List<ConstructionDTO> parseToDTO(String input) {
         return Arrays.asList(input.split("\\n"))
                 .stream()

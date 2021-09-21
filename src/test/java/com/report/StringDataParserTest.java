@@ -1,17 +1,19 @@
 package com.report;
 
+import com.report.dto.ConstructionDTO;
+import com.report.utility.StringDataParser;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.List;
 
-public class StringParserTest {
-    static StringParser parser;
+public class StringDataParserTest {
+    static StringDataParser parser;
 
     @BeforeClass
     public static void setUp() {
-        parser = new StringParser();
+        parser = new StringDataParser();
     }
 
     @Test

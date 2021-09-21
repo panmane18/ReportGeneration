@@ -1,14 +1,18 @@
-package com.report;
+package com.report.controller;
+
+import com.report.utility.StringDataParser;
+import com.report.dto.ConstructionDTO;
+import com.report.service.ReportGeneratorServiceImpl;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class ReportGenerationController {
-    StringParser parser;
-    ReportGenerator reportGenerator;
+    StringDataParser parser;
+    ReportGeneratorServiceImpl reportGenerator;
 
-    ReportGenerationController(StringParser parser, ReportGenerator reportGenerator) {
+    public ReportGenerationController(StringDataParser parser, ReportGeneratorServiceImpl reportGenerator) {
         this.parser = parser;
         this.reportGenerator = reportGenerator;
     }
@@ -18,7 +22,8 @@ public class ReportGenerationController {
         System.out.println(dtos);
         System.out.println("--------------The number of unique customerId for each contractId.-----------------");
         Map<Integer, Integer> uniqueCountOfCustomerIdForContractId = reportGenerator.getUniqueCountOfCustomerIdForContractId(dtos);
-        uniqueCountOfCustomerIdForContractId.forEach((k, v) -> System.out.println(k + "   " + v));
+        System.out.println("contractId"+"  "+"uniqueCustomerId");
+        uniqueCountOfCustomerIdForContractId.forEach((k, v) -> System.out.println(k + "          " + v));
         System.out.println("------------------------------------------------------------------------------------");
 
         System.out.println("-------------- The number of unique customerId for each geozone.-----------------");
