@@ -26,7 +26,7 @@ public class StringDataParser {
                 .collect(Collectors.toList());
 
         if (records == null || records.isEmpty()) {
-            throw new RecordNotFoundException("Mandatory fields are missing to generate report");
+            throw new RecordNotFoundException("Mandatory fields are missing ");
         }
         return records;
     }
