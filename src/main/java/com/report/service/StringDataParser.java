@@ -1,25 +1,29 @@
-package com.report.utility;
+package com.report.service;
 
-import com.report.dto.ConstructionRecordDTO;
+import com.report.dao.ConstructionRecord;
+import com.report.dao.ConstructionRecordDao;
+import com.report.bo.ConstructionRecordBO;
 import com.report.exception.DataFormatException;
 import com.report.exception.RecordNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * Class to compose {@link ConstructionRecordDTO} object. Take comma separated string data as input row and
+ * Class to compose {@link ConstructionRecordBO} object. Take comma separated string data as input row and
  * build ConstructionRecordDTO object
  */
 public class StringDataParser {
-    public List<ConstructionRecordDTO> parseToDTO(String input) throws RecordNotFoundException {
-        if (StringUtils.isEmpty(input)) {
-            throw new RecordNotFoundException("No record found to parse to dto");
-        }
-        List<ConstructionRecordDTO> records = Arrays.asList(input.split("\\n"))
+    private ConstructionRecordDao constructionRecordDao;
+
+    public StringDataParser(ConstructionRecordDao constructionRecordDao) {
+        this.constructionRecordDao = constructionRecordDao;
+    }
+
+    public List<ConstructionRecordBO> getConstructionData() throws RecordNotFoundException {
+        List<ConstructionRecordBO> records = constructionRecordDao.listConstructionData()
                 .stream()
                 .map(this::buildDTO)
                 .filter(Objects::nonNull)
@@ -31,58 +35,56 @@ public class StringDataParser {
         return records;
     }
 
-    private ConstructionRecordDTO buildDTO(String line) {
+    private ConstructionRecordBO buildDTO(ConstructionRecord line) {
         try {
-            ConstructionRecordDTO dto = new ConstructionRecordDTO();
-            String[] split = line.split(",");
-            setCustomerId(dto, split[0]);
-            setContractId(dto, split[1]);
-            setGeoZone(dto, split[2]);
-            setTeamCode(dto, split[3]);
-            setProjectCode(dto, split[4]);
-            setBuildDuration(dto, split[5]);
+            ConstructionRecordBO dto = new ConstructionRecordBO();
+            setCustomerId(dto, line.getCustomerId());
+            setContractId(dto, line.getContractId());
+            setGeoZone(dto, line.getGeoZone());
+            setTeamCode(dto, line.getTeamCode());
+            setProjectCode(dto, line.getProjectCode());
+            setBuildDuration(dto, line.getBuildDuration());
             return dto;
         } catch (NumberFormatException e) {
             System.out.println("customerId,contractId or builduration is not numeric for :" + line);
-        } catch (DataFormatException e){
-            System.out.println("Invalid data :"+e.getMessage()+" for "+line);
-        }
-        catch (Exception e) {
+        } catch (DataFormatException e) {
+            System.out.println("Invalid data :" + e.getMessage() + " for " + line);
+        } catch (Exception e) {
             System.out.println("Unknown exception occured while building construction dto :" + line);
         }
         return null;
     }
 
-    private void setCustomerId(ConstructionRecordDTO dto, String customerId) throws DataFormatException {
+    private void setCustomerId(ConstructionRecordBO dto, String customerId) throws DataFormatException {
         if (StringUtils.isEmpty(customerId)) {
             throw new DataFormatException("customerId is either empty or null");
         }
         dto.setCustomerId(Integer.parseInt(customerId));
     }
 
-    private void setContractId(ConstructionRecordDTO dto, String contractId) throws DataFormatException {
+    private void setContractId(ConstructionRecordBO dto, String contractId) throws DataFormatException {
         if (StringUtils.isEmpty(contractId)) {
             throw new DataFormatException("contractId is either empty or null");
         }
         dto.setContractId(Integer.parseInt(contractId));
     }
 
-    private void setGeoZone(ConstructionRecordDTO dto, String geoZone) throws DataFormatException {
+    private void setGeoZone(ConstructionRecordBO dto, String geoZone) throws DataFormatException {
         if (StringUtils.isEmpty(geoZone)) {
             throw new DataFormatException("geoZone is either empty or null");
         }
         dto.setGeoZone(geoZone);
     }
 
-    private void setTeamCode(ConstructionRecordDTO dto, String teamCode) throws DataFormatException {
+    private void setTeamCode(ConstructionRecordBO dto, String teamCode) throws DataFormatException {
         dto.setTeamCode(teamCode);
     }
 
-    private void setProjectCode(ConstructionRecordDTO dto, String projectCode) {
+    private void setProjectCode(ConstructionRecordBO dto, String projectCode) {
         dto.setProjectCode(projectCode);
     }
 
-    private void setBuildDuration(ConstructionRecordDTO dto, String buildDuration) throws DataFormatException {
+    private void setBuildDuration(ConstructionRecordBO dto, String buildDuration) throws DataFormatException {
         if (StringUtils.isEmpty(buildDuration)) {
             throw new DataFormatException("buildDuration is either empty or null");
         }

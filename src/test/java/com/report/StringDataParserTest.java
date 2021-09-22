@@ -1,97 +1,64 @@
 package com.report;
 
-import com.report.dto.ConstructionRecordDTO;
+
+import com.report.bo.ConstructionRecordBO;
+import com.report.dao.ConstructionRecord;
+import com.report.dao.ConstructionRecordDao;
 import com.report.exception.RecordNotFoundException;
-import com.report.utility.StringDataParser;
-import org.junit.Assert;
-import org.junit.BeforeClass;
+import com.report.service.StringDataParser;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+
 public class StringDataParserTest {
-    static StringDataParser parser;
+    StringDataParser parser;
+    ConstructionRecordDao dao;
 
-    @BeforeClass
-    public static void setUp() {
-        parser = new StringDataParser();
+    @Before
+    public void beforeEachTest() {
+        dao = mock(ConstructionRecordDao.class);
+        parser = new StringDataParser(dao);
     }
 
     @Test(expected = RecordNotFoundException.class)
-    public void testInputStringIsEmpty() throws RecordNotFoundException {
-        String str = "";
-        parser.parseToDTO(str);
-    }
-
-    @Test(expected = RecordNotFoundException.class)
-    public void testNoRecordToProcess() throws RecordNotFoundException {
-        String str = ",2345,us_east,RedTeam,ProjectApple,3445s\n" +
-                "3244132,,eu_west,YellowTeam3,ProjectEgg,4122s";
-        List<ConstructionRecordDTO> constructionDTOS = parser.parseToDTO(str);
+    public void testWhenCustomerIdIsNullAndContractIdIsEmpty() throws RecordNotFoundException {
+        ConstructionRecord record1 = ConstructionRecord.builder().customerId(null).contractId("2345").geoZone("us_east")
+                .teamCode("RedTeam").projectCode("ProjectApple").buildDuration("3445s").build();
+        ConstructionRecord record2 = ConstructionRecord.builder().customerId("2343225").contractId("").geoZone("us_east")
+                .teamCode("RedTeam").projectCode("ProjectApple").buildDuration("3445s").build();
+        List<ConstructionRecord> list = List.of(record1, record2);
+        when(dao.listConstructionData()).thenReturn(list);
+        parser.getConstructionData();
     }
 
     @Test
     public void testSuccessfullParsingOfData() throws RecordNotFoundException {
-        String str = "2343225,2345,us_east,RedTeam,ProjectApple,3445s\n" +
-                "1223456,2345,us_west,BlueTeam,ProjectBanana,2211s\n" +
-                "3244332,2346,eu_west,YellowTeam3,ProjectCarrot,4322s\n" +
-                "1233456,2345,us_west,BlueTeam,ProjectDate,2221s\n" +
-                "3244132,2346,eu_west,YellowTeam3,ProjectEgg,4122s";
-        List<ConstructionRecordDTO> constructionDTOS = parser.parseToDTO(str);
-        Assert.assertEquals(5, constructionDTOS.size());
+        ConstructionRecord record1 = ConstructionRecord.builder().customerId("2343225").contractId("2345").geoZone("us_east")
+                .teamCode("RedTeam").projectCode("ProjectApple").buildDuration("3445s").build();
+        ConstructionRecord record2 = ConstructionRecord.builder().customerId("2343225").contractId("2345").geoZone("us_east")
+                .teamCode("RedTeam").projectCode("ProjectApple").buildDuration("3445s").build();
+        List<ConstructionRecord> list = List.of(record1, record2);
+        when(dao.listConstructionData()).thenReturn(list);
+        List<ConstructionRecordBO> constructionDTOS = parser.getConstructionData();
+        assertEquals(2, constructionDTOS.size());
     }
 
-    @Test
-    public void testCustomerIdEmpty() throws RecordNotFoundException {
-        String str = ",2345,us_east,RedTeam,ProjectApple,3445s\n" +
-                "1223456,2345,us_west,BlueTeam,ProjectBanana,2211s\n" +
-                "3244332,2346,eu_west,YellowTeam3,ProjectCarrot,4322s\n" +
-                "3244132,2346,eu_west,YellowTeam3,ProjectEgg,4122s";
-        List<ConstructionRecordDTO> constructionDTOS = parser.parseToDTO(str);
-        Assert.assertEquals(3, constructionDTOS.size());
-    }
-
-    @Test
-    public void testContractIdEmpty() throws RecordNotFoundException {
-        String str = "2343225,2345,us_east,RedTeam,ProjectApple,3445s\n" +
-                "1223456,,us_west,BlueTeam,ProjectBanana,2211s\n" +
-                "3244332,,eu_west,YellowTeam3,ProjectCarrot,4322s\n" +
-                "3244132,2346,eu_west,YellowTeam3,ProjectEgg,4122s";
-        List<ConstructionRecordDTO> constructionDTOS = parser.parseToDTO(str);
-        Assert.assertEquals(2, constructionDTOS.size());
-    }
-
-    @Test
-    public void testGeoZoneEmpty() throws RecordNotFoundException {
-        String str = "2343225,2345,us_east,RedTeam,ProjectApple,3445s\n" +
-                "1223456,2345,us_west,BlueTeam,ProjectBanana,2211s\n" +
-                "3244332,2346,eu_west,YellowTeam3,ProjectCarrot,4322s\n" +
-                "1233456,2345,us_west,BlueTeam,ProjectDate,2221s\n" +
-                "3244132,2346,,YellowTeam3,ProjectEgg,4122s";
-        List<ConstructionRecordDTO> constructionDTOS = parser.parseToDTO(str);
-        Assert.assertEquals(4, constructionDTOS.size());
-    }
-
-    @Test
-    public void testBuildDurationEmpty() throws RecordNotFoundException {
-        String str = "2343225,2345,us_east,RedTeam,ProjectApple,3445s\n" +
-                "1223456,2345,us_west,BlueTeam,ProjectBanana,2211s\n" +
-                "3244332,2346,eu_west,YellowTeam3,ProjectCarrot,4322s\n" +
-                "1233456,2345,us_west,BlueTeam,ProjectDate,\n" +
-                "3244132,2346,,YellowTeam3,ProjectEgg,";
-        List<ConstructionRecordDTO> constructionDTOS = parser.parseToDTO(str);
-        Assert.assertEquals(3, constructionDTOS.size());
-    }
 
     @Test
     public void testBuildDurationIsNotNumeric() throws RecordNotFoundException {
-        String str = "2343225,2345,us_east,RedTeam,ProjectApple,3445s\n" +
-                "1223456,2345,us_west,BlueTeam,ProjectBanana,2211s\n" +
-                "3244332,2346,eu_west,YellowTeam3,ProjectCarrot,4322s\n" +
-                "1233456,2345,us_west,BlueTeam,ProjectDate,2221s\n" +
-                "3244132,2346,us_west,YellowTeam3,ProjectEgg,abc";
-        List<ConstructionRecordDTO> constructionDTOS = parser.parseToDTO(str);
-        Assert.assertEquals(4, constructionDTOS.size());
+        ConstructionRecord record1 = ConstructionRecord.builder().customerId("2343225").contractId("2345").geoZone("us_east")
+                .teamCode("RedTeam").projectCode("ProjectApple").buildDuration("abc").build();
+        ConstructionRecord record2 = ConstructionRecord.builder().customerId("2343225").contractId("2345").geoZone("us_east")
+                .teamCode("RedTeam").projectCode("ProjectApple").buildDuration("3445s").build();
+        List<ConstructionRecord> list = List.of(record1, record2);
+        when(dao.listConstructionData()).thenReturn(list);
+        List<ConstructionRecordBO> constructionDTOS = parser.getConstructionData();
+        assertEquals(1, constructionDTOS.size());
     }
-
 }

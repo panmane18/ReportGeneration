@@ -1,6 +1,6 @@
 package com.report;
 
-import com.report.dto.ConstructionRecordDTO;
+import com.report.bo.ConstructionRecordBO;
 import com.report.service.ReportGeneratorService;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,16 +16,16 @@ import static org.junit.Assert.assertEquals;
 public class ReportGeneratorServiceTest {
 
     static ReportGeneratorService reportGeneratore;
-    static List<ConstructionRecordDTO> dtos = new ArrayList<>();
+    static List<ConstructionRecordBO> dtos = new ArrayList<>();
 
     @BeforeClass
     public static void setUp() {
         reportGeneratore = new ReportGeneratorService();
-        dtos.add(new ConstructionRecordDTO(2343225, 2345, "us_east", "RedTeam", "ProjectApple", 3445));
-        dtos.add(new ConstructionRecordDTO(1223456, 2345, "us_west", "BlueTeam", "ProjectBanana", 2211));
-        dtos.add(new ConstructionRecordDTO(3244332, 2346, "eu_west", "YellowTeam3", "ProjectCarrot", 4322));
-        dtos.add(new ConstructionRecordDTO(1233456, 2345, "us_west", "BlueTeam", "ProjectDate", 2221));
-        dtos.add(new ConstructionRecordDTO(3244132, 2346, "eu_west", "YellowTeam3", "ProjectEgg", 4122));
+        dtos.add(new ConstructionRecordBO(2343225, 2345, "us_east", "RedTeam", "ProjectApple", 3445));
+        dtos.add(new ConstructionRecordBO(1223456, 2345, "us_west", "BlueTeam", "ProjectBanana", 2211));
+        dtos.add(new ConstructionRecordBO(3244332, 2346, "eu_west", "YellowTeam3", "ProjectCarrot", 4322));
+        dtos.add(new ConstructionRecordBO(1233456, 2345, "us_west", "BlueTeam", "ProjectDate", 2221));
+        dtos.add(new ConstructionRecordBO(3244132, 2346, "eu_west", "YellowTeam3", "ProjectEgg", 4122));
     }
 
     @Test
@@ -44,7 +44,6 @@ public class ReportGeneratorServiceTest {
         assertEquals(3445, result.get("us_east").intValue());
         assertEquals(2216, result.get("us_west").intValue());
         assertEquals(4222, result.get("eu_west").intValue());
-        ;
     }
 
     @Test

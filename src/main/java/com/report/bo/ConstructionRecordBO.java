@@ -1,4 +1,4 @@
-package com.report.dto;
+package com.report.bo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @AllArgsConstructor
-public class ConstructionRecordDTO {
+public class ConstructionRecordBO {
     private int customerId;
     private int contractId;
     private String geoZone;
