@@ -1,13 +1,17 @@
 package com.report.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 @AllArgsConstructor
-public class ConstructionDTO {
+public class ConstructionRecordDTO {
     private int customerId;
     private int contractId;
     private String geoZone;
