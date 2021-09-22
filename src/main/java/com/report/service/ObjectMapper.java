@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
  * Class to compose {@link ConstructionRecordBO} object. Take comma separated string data as input row and
  * build ConstructionRecordDTO object
  */
-public class StringDataParser {
+public class ObjectMapper {
     private ConstructionRecordDao constructionRecordDao;
 
-    public StringDataParser(ConstructionRecordDao constructionRecordDao) {
+    public ObjectMapper(ConstructionRecordDao constructionRecordDao) {
         this.constructionRecordDao = constructionRecordDao;
     }
 

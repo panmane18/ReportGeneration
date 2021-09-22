@@ -5,7 +5,7 @@ import com.report.bo.ConstructionRecordBO;
 import com.report.dao.ConstructionRecord;
 import com.report.dao.ConstructionRecordDao;
 import com.report.exception.RecordNotFoundException;
-import com.report.service.StringDataParser;
+import com.report.service.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,13 +17,13 @@ import static org.mockito.Mockito.when;
 
 
 public class StringDataParserTest {
-    StringDataParser parser;
+    ObjectMapper parser;
     ConstructionRecordDao dao;
 
     @Before
     public void beforeEachTest() {
         dao = mock(ConstructionRecordDao.class);
-        parser = new StringDataParser(dao);
+        parser = new ObjectMapper(dao);
     }
 
     @Test(expected = RecordNotFoundException.class)

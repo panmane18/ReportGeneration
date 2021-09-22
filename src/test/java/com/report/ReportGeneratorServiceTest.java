@@ -1,7 +1,7 @@
 package com.report;
 
 import com.report.bo.ConstructionRecordBO;
-import com.report.service.ReportGeneratorService;
+import com.report.service.ReportGeneratorServiceImpl;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -15,12 +15,12 @@ import static org.junit.Assert.assertEquals;
 
 public class ReportGeneratorServiceTest {
 
-    static ReportGeneratorService reportGeneratore;
+    static ReportGeneratorServiceImpl reportGeneratore;
     static List<ConstructionRecordBO> dtos = new ArrayList<>();
 
     @BeforeClass
     public static void setUp() {
-        reportGeneratore = new ReportGeneratorService();
+        reportGeneratore = new ReportGeneratorServiceImpl();
         dtos.add(new ConstructionRecordBO(2343225, 2345, "us_east", "RedTeam", "ProjectApple", 3445));
         dtos.add(new ConstructionRecordBO(1223456, 2345, "us_west", "BlueTeam", "ProjectBanana", 2211));
         dtos.add(new ConstructionRecordBO(3244332, 2346, "eu_west", "YellowTeam3", "ProjectCarrot", 4322));
