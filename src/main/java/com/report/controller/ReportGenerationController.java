@@ -13,39 +13,39 @@ import java.util.Set;
 public class ReportGenerationController {
     private static final Logger LOGGER = Logger.getLogger(ReportGenerationController.class);
 
-    ObjectMapper parser;
-    ReportGeneratorService reportGenerator;
+    ObjectMapper mapper;
+    ReportGeneratorService reportGeneratorService;
 
     public ReportGenerationController(ObjectMapper parser, ReportGeneratorService reportGenerator) {
-        this.parser = parser;
-        this.reportGenerator = reportGenerator;
+        this.mapper = parser;
+        this.reportGeneratorService = reportGenerator;
     }
 
     public void generateReport() {
         try {
-            List<ConstructionRecordBO> dtos = parser.getConstructionData();
+            List<ConstructionRecordBO> constructionRecordBOS = mapper.getConstructionData();
             LOGGER.info("--------------The number of unique customerId for each contractId.-----------------");
-            Map<Integer, Integer> uniqueCountOfCustomerIdForContractId = reportGenerator.getUniqueCountOfCustomerIdForContractId(dtos);
+            Map<Integer, Integer> uniqueCountOfCustomerIdForContractId = reportGeneratorService.getUniqueCountOfCustomerIdForContractId(constructionRecordBOS);
             LOGGER.info("contractId" + "  " + "uniqueCustomerId");
             uniqueCountOfCustomerIdForContractId.forEach((k, v) -> LOGGER.info(k + "          " + v));
             LOGGER.info("------------------------------------------------------------------------------------");
 
             LOGGER.info("-------------- The number of unique customerId for each geozone.-----------------");
-            Map<String, Integer> uniqueCountOfCustomerIdForGeoZone = reportGenerator.getUniqueCountOfCustomerIdForGeoZone(dtos);
+            Map<String, Integer> uniqueCountOfCustomerIdForGeoZone = reportGeneratorService.getUniqueCountOfCustomerIdForGeoZone(constructionRecordBOS);
             LOGGER.info("GeoZone" + "  " + "uniqueCustomerId");
             uniqueCountOfCustomerIdForGeoZone.forEach((k, v) -> LOGGER.info(k + "   " + v));
             LOGGER.info("------------------------------------------------------------------------------------");
 
             LOGGER.info("-------------- The average buildduration for each geozone.----------------");
-            Map<String, Double> avgBuildDurationForGeoZone = reportGenerator.getAvgBuildDurationForGeoZone(dtos);
+            Map<String, Double> avgBuildDurationForGeoZone = reportGeneratorService.getAvgBuildDurationForGeoZone(constructionRecordBOS);
             LOGGER.info("GeoZone" + "  " + "avgBuildDuration");
             avgBuildDurationForGeoZone.forEach((k, v) -> LOGGER.info(k + "   " + v));
             LOGGER.info("------------------------------------------------------------------------------------");
 
             LOGGER.info("--------------The list of unique customerId for each geozone.-----------------");
-            Map<String, Set<Integer>> stringSetMap = reportGenerator.listUniqueCustomerIdForGeoZone(dtos);
+            Map<String, Set<Integer>> listUniqueCustomerIdForGeoZone = reportGeneratorService.listUniqueCustomerIdForGeoZone(constructionRecordBOS);
             LOGGER.info("GeoZone" + "  " + "uniqueCustomerIdList");
-            stringSetMap.forEach((k, v) -> LOGGER.info(k + "   " + v));
+            listUniqueCustomerIdForGeoZone.forEach((k, v) -> LOGGER.info(k + "   " + v));
             LOGGER.info("------------------------------------------------------------------------------------");
         } catch (RecordNotFoundException e) {
             LOGGER.error("No record found to generate report :" + e.getMessage(), e);

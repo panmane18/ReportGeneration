@@ -20,7 +20,7 @@ public class StringConstructionRecordDaoImpl implements ConstructionRecordDao {
                 .map(this::mapToObject)
                 .collect(Collectors.toList());
         if (records == null || records.isEmpty())
-            throw new RecordNotFoundException("Record not present to generate report");
+            throw new RecordNotFoundException("Records not present to generate report");
         return records;
     }
 

@@ -30,8 +30,10 @@ public class StringDataParserTest {
     public void testWhenCustomerIdIsNullAndContractIdIsEmpty() throws RecordNotFoundException {
         ConstructionRecord record1 = ConstructionRecord.builder().customerId(null).contractId("2345").geoZone("us_east")
                 .teamCode("RedTeam").projectCode("ProjectApple").buildDuration("3445s").build();
+
         ConstructionRecord record2 = ConstructionRecord.builder().customerId("2343225").contractId("").geoZone("us_east")
                 .teamCode("RedTeam").projectCode("ProjectApple").buildDuration("3445s").build();
+
         List<ConstructionRecord> list = List.of(record1, record2);
         when(dao.listConstructionData()).thenReturn(list);
         parser.getConstructionData();
@@ -41,9 +43,11 @@ public class StringDataParserTest {
     public void testSuccessfullParsingOfData() throws RecordNotFoundException {
         ConstructionRecord record1 = ConstructionRecord.builder().customerId("2343225").contractId("2345").geoZone("us_east")
                 .teamCode("RedTeam").projectCode("ProjectApple").buildDuration("3445s").build();
+
         ConstructionRecord record2 = ConstructionRecord.builder().customerId("2343225").contractId("2345").geoZone("us_east")
                 .teamCode("RedTeam").projectCode("ProjectApple").buildDuration("3445s").build();
         List<ConstructionRecord> list = List.of(record1, record2);
+
         when(dao.listConstructionData()).thenReturn(list);
         List<ConstructionRecordBO> constructionDTOS = parser.getConstructionData();
         assertEquals(2, constructionDTOS.size());
@@ -54,8 +58,10 @@ public class StringDataParserTest {
     public void testBuildDurationIsNotNumeric() throws RecordNotFoundException {
         ConstructionRecord record1 = ConstructionRecord.builder().customerId("2343225").contractId("2345").geoZone("us_east")
                 .teamCode("RedTeam").projectCode("ProjectApple").buildDuration("abc").build();
+
         ConstructionRecord record2 = ConstructionRecord.builder().customerId("2343225").contractId("2345").geoZone("us_east")
                 .teamCode("RedTeam").projectCode("ProjectApple").buildDuration("3445s").build();
+
         List<ConstructionRecord> list = List.of(record1, record2);
         when(dao.listConstructionData()).thenReturn(list);
         List<ConstructionRecordBO> constructionDTOS = parser.getConstructionData();

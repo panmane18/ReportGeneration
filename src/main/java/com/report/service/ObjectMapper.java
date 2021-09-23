@@ -1,21 +1,25 @@
 package com.report.service;
 
+import com.report.controller.ReportGenerationController;
 import com.report.dao.ConstructionRecord;
 import com.report.dao.ConstructionRecordDao;
 import com.report.bo.ConstructionRecordBO;
 import com.report.exception.DataFormatException;
 import com.report.exception.RecordNotFoundException;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * Class to compose {@link ConstructionRecordBO} object. Take comma separated string data as input row and
- * build ConstructionRecordDTO object
+ * Class to compose {@link ConstructionRecordBO} object. Take input as {@link ConstructionRecord}
+ * and validate mandatory field customerId,contractId,geoZone and buildDuration
  */
 public class ObjectMapper {
+    private static final Logger LOGGER = Logger.getLogger(ReportGenerationController.class);
+
     private ConstructionRecordDao constructionRecordDao;
 
     public ObjectMapper(ConstructionRecordDao constructionRecordDao) {
@@ -30,7 +34,7 @@ public class ObjectMapper {
                 .collect(Collectors.toList());
 
         if (records == null || records.isEmpty()) {
-            throw new RecordNotFoundException("Mandatory fields are missing ");
+            throw new RecordNotFoundException("No record fullfulling criteria of report generation");
         }
         return records;
     }
@@ -46,11 +50,11 @@ public class ObjectMapper {
             setBuildDuration(dto, line.getBuildDuration());
             return dto;
         } catch (NumberFormatException e) {
-            System.out.println("customerId,contractId or builduration is not numeric for :" + line);
+            LOGGER.error("customerId,contractId or builduration is not numeric for :" + line);
         } catch (DataFormatException e) {
-            System.out.println("Invalid data :" + e.getMessage() + " for " + line);
+            LOGGER.error("Invalid data :" + e.getMessage() + " for " + line);
         } catch (Exception e) {
-            System.out.println("Unknown exception occured while building construction dto :" + line);
+            LOGGER.error("Unknown exception occured while building construction dto :" + line);
         }
         return null;
     }
