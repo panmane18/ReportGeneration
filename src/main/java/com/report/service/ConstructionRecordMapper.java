@@ -17,12 +17,12 @@ import java.util.stream.Collectors;
  * Class to compose {@link ConstructionRecordBO} object. Take input as {@link ConstructionRecord}
  * and validate mandatory field customerId,contractId,geoZone and buildDuration
  */
-public class ObjectMapper {
+public class ConstructionRecordMapper {
     private static final Logger LOGGER = Logger.getLogger(ReportGenerationController.class);
 
     private ConstructionRecordDao constructionRecordDao;
 
-    public ObjectMapper(ConstructionRecordDao constructionRecordDao) {
+    public ConstructionRecordMapper(ConstructionRecordDao constructionRecordDao) {
         this.constructionRecordDao = constructionRecordDao;
     }
 

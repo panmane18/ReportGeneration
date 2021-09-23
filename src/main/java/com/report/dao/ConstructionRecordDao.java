@@ -6,7 +6,7 @@ import java.util.List;
 
 
 /**
- * Read construction data from StrigData while is comma separated values of rows
+ * Read construction data from StrigData which is comma separated values of rows
  * In future can be extended to read it from sql or mysql databases
  */
 public interface ConstructionRecordDao {

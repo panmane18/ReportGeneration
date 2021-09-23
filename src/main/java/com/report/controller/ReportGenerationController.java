@@ -3,7 +3,7 @@ package com.report.controller;
 import com.report.exception.RecordNotFoundException;
 import com.report.bo.ConstructionRecordBO;
 import com.report.service.ReportGeneratorService;
-import com.report.service.ObjectMapper;
+import com.report.service.ConstructionRecordMapper;
 import org.apache.log4j.Logger;
 
 import java.util.List;
@@ -13,10 +13,10 @@ import java.util.Set;
 public class ReportGenerationController {
     private static final Logger LOGGER = Logger.getLogger(ReportGenerationController.class);
 
-    ObjectMapper mapper;
+    ConstructionRecordMapper mapper;
     ReportGeneratorService reportGeneratorService;
 
-    public ReportGenerationController(ObjectMapper parser, ReportGeneratorService reportGenerator) {
+    public ReportGenerationController(ConstructionRecordMapper parser, ReportGeneratorService reportGenerator) {
         this.mapper = parser;
         this.reportGeneratorService = reportGenerator;
     }
